@@ -22,7 +22,7 @@ def set_background_mac(filename):
 #Public: Sets the desktop background for windows 
 #filename - the file to set the desktop background to
 def set_background_windows(filename):
-   if (filename.find("bmp") != 1):
+   if (filename.endswith("bmp") != 1):
       img = Image.open(filename)
       newimage = "C:\Documents and Settings\All Users\Documents\My Pictures\Sample Pictures\pybackground.bmp"
       img.save(newimage)
