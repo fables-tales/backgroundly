@@ -33,9 +33,16 @@ def set_background_windows(filename):
 #Public: Sets the desktop background for linux
 #filename - the file to set the desktop background to
 def set_background_linux(filename):
-    command = "gconftool-2 --set /desktop/gnome/background/picture_filename --type string '" + filename + "'"
-    status, output = commands.getstatusoutput(command)  # status=0 if success
-
+    desktop = os.environ.pop("DESKTOP_SESSION")
+    if (desktop == "gnome"):
+        command = "gconftool-2 --set /desktop/gnome/background/picture_filename --type string '" + filename + "'"
+        status, output = commands.getstatusoutput(command)  # status=0 if success
+    elif (desktop == "xfce"):
+        displaylist = commands.getoutput("xfconf-query -c xfce4-desktop -l | grep image-path").splitlines()
+        for display in displaylist:
+            command = "xfconf-query -c xfce4-desktop -p " + display + " -s " + filename
+            status, output = commands.getstatusoutput(command)  # status=0 if success
+            
 if __name__ == "__main__":
     #get the current operating system, and set background based on it
     system = platform.system()
